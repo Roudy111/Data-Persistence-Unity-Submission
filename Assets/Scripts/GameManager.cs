@@ -108,10 +108,7 @@ public class GameManager : MonoBehaviour
         GameOverText.SetActive(true);
     }
 
-    public void BackToMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
+
 
 
 }
