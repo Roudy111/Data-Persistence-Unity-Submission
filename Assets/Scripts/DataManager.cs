@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class DataManager : MonoBehaviour
 {
@@ -22,9 +23,9 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    [System.Serializable]
+    class SaveDate
     {
-        
+
     }
 }
