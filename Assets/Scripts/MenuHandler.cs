@@ -1,21 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MenuHandler : MonoBehaviour
 {
-    public static MainMenu instance;
 
-    private void Awake()
-    {
-        if(instance != null)
-        {
-            Destroy(gameObject);
-        }
-        instance= this;
-        DontDestroyOnLoad(gameObject);
-    }
     public void startGame()
     {
         SceneManager.LoadScene(1);
@@ -25,7 +16,15 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-    
+
+    public void ExitGame()
+    {
+
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+
+#endif
+    }
 
 
 }

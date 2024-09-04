@@ -28,6 +28,9 @@ public class MainManager : MonoBehaviour
     {
         InitiateBlocks();
     }
+
+
+
     public void InitiateBlocks()
     {
         const float step = 0.6f;
