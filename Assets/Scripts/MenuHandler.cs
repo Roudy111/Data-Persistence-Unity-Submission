@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System.Security.Policy;
 
 
 public class MenuHandler : MonoBehaviour
 {
+    public TMP_InputField TM_PlayeNameInput;
+
+    private void Start()
+    {
+        
+    }
 
     public void startGame()
     {
         SceneManager.LoadScene(1);
+        
     }
 
     public void BackToMenu()
@@ -26,6 +35,15 @@ public class MenuHandler : MonoBehaviour
 
 #endif
     }
+    public void PlayerName()
+    {
+        DataManager.instance.m_playerName = TM_PlayeNameInput.text;
+        
+
+
+    }
+
+
 
 
 }

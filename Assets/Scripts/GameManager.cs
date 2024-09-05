@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text bestScoreText;
     
     private bool m_Started = false;
     private int m_Points;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InitiateBlocks();
+        BestScore();
     }
 
 
@@ -111,6 +113,11 @@ public class GameManager : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    void BestScore()
+    {
+        bestScoreText.text = DataManager.instance.m_playerName;
     }
 
 

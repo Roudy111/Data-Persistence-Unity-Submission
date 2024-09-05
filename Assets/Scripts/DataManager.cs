@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using TMPro;
 
 public class DataManager : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class DataManager : MonoBehaviour
    /// </summary>
    /// 
     public static DataManager instance { get; private set;}
+
+    public string m_playerName;
+
 
     void Awake()
     {
@@ -22,6 +26,7 @@ public class DataManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    
 
     [System.Serializable]
     class SaveDate
