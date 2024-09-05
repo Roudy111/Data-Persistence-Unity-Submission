@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     {
         InitiateBlocks();
         BestScore();
+       
     }
 
 
@@ -83,6 +84,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void Back2Menu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     private void Update()
     {
         if (!m_Started)
@@ -117,6 +123,7 @@ public class GameManager : MonoBehaviour
         highScore = m_Points;
 
        }
+        bestScoreText.text = DataManager.instance.m_playerName;
 
     }
 
@@ -128,10 +135,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    void BestScore()
-    {
-        bestScoreText.text = DataManager.instance.m_playerName;
-    }
+
 
 
 }

@@ -544,8 +544,10 @@ MonoBehaviour:
   LineCount: 6
   Ball: {fileID: 177912862}
   ScoreText: {fileID: 188020406}
+  BestScoreText: {fileID: 0}
   GameOverText: {fileID: 474497238}
   bestScoreText: {fileID: 2078529056}
+  highScore: 0
 --- !u!1 &455529321
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +919,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 450625942}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: BackToMenu
+        m_MethodName: Back2Menu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
