@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -14,12 +15,16 @@ public class GameManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+
+    public int highScore = 0;
+
 
     
 
@@ -100,6 +105,17 @@ public class GameManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+       
+    }
+
+    public void BestScore()
+    {
+       if (highScore < m_Points)
+       {
+        highScore = m_Points;
+
+       }
+
     }
 
     public void GameOver()
