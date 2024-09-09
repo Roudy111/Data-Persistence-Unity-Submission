@@ -8,11 +8,15 @@ public class DataManager : MonoBehaviour
 {
    /// <summary>
    /// This script is singlethon to manage the saving between scene and session
+   /// The Data between the scene should be saved here 
+   /// The Data Between Session are also added in SaveData Class
    /// </summary>
    /// 
     public static DataManager instance { get; private set;}
 
-    public string m_playerName;
+    public string Save_playerName;
+    public int HighScore;
+
 
 
     void Awake()

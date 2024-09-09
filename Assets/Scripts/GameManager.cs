@@ -21,10 +21,13 @@ public class GameManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
-    
+    private int m_TotalBrick = 0;
+
+
     private bool m_GameOver = false;
 
     public int highScore = 0;
+    
 
 
     
@@ -33,9 +36,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InitiateBlocks();
-        BestScore();
+        SaveBestScore();
+        
        
     }
+
 
 
 
@@ -43,6 +48,7 @@ public class GameManager : MonoBehaviour
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
+        m_TotalBrick = 0;
         
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
@@ -52,11 +58,28 @@ public class GameManager : MonoBehaviour
                 Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
-                brick.onDestroyed.AddListener(AddPoint);
+                brick.onDestroyed.AddListener(onBrickDestroy);
+                m_TotalBrick++;
             }
         }
 
     }
+
+    private void onBrickDestroy(int point)
+    {
+        AddPoint(point);
+        m_TotalBrick--;
+
+        if (m_TotalBrick <= 0)
+        {
+            InitiateBlocks();
+        }
+
+
+
+    }
+
+
 
 /// <summary>
 /// Here comes the states of the game when the game is blocks are intiated. 
@@ -71,6 +94,7 @@ public class GameManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+             
 
 
     }
@@ -98,6 +122,7 @@ public class GameManager : MonoBehaviour
                 StartGame();
             }
         }
+
         else if (m_GameOver)
         {
             RestartGame();
@@ -116,21 +141,23 @@ public class GameManager : MonoBehaviour
        
     }
 
-    public void BestScore()
+    public void SaveBestScore()
     {
-       if (highScore < m_Points)
+       if (DataManager.instance.HighScore < m_Points )
        {
-        highScore = m_Points;
+        DataManager.instance.HighScore = m_Points;
 
        }
-        bestScoreText.text = DataManager.instance.m_playerName;
+        bestScoreText.text = $"BestScore : {DataManager.instance.Save_playerName} {DataManager.instance.HighScore}"; 
 
     }
+
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        SaveBestScore();
     }
 
 
