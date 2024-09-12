@@ -27,10 +27,12 @@ public class GameManager : MonoBehaviour
     private bool m_GameOver = false;
 
     public int highScore = 0;
-    
+   
 
 
-    
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,8 +44,32 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if (!m_Started)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartGame();
+            }
+        }
+
+        else if (m_GameOver)
+        {
+            RestartGame();
+
+        }
 
 
+    }
+
+
+
+
+    /// <summary>
+    /// This is the main method for making the blocks of Bricks. 
+    /// I put a m_totalbrick to check it later if it is 0 then needed to be initiated again for next level -- then it never stops
+    /// </summary>
     public void InitiateBlocks()
     {
         const float step = 0.6f;
@@ -64,6 +90,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    
 
     private void onBrickDestroy(int point)
     {
@@ -78,13 +105,18 @@ public class GameManager : MonoBehaviour
 
 
     }
+    void AddPoint(int point)
+    {
+        m_Points += point;
+        ScoreText.text = $"Score : {m_Points}";
+
+    }
 
 
-
-/// <summary>
-/// Here comes the states of the game when the game is blocks are intiated. 
-/// For more furthur customization, they need to have listiner and then be called.
-/// </summary>
+    /// <summary>
+    /// Here comes the states of the game when the game is blocks are intiated. 
+    /// For more furthur customization, they need to have listiner and then be called.
+    /// </summary>
     public void StartGame()
     {
                 m_Started = true;
@@ -108,49 +140,21 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void SaveBestScore()
+    {
+        if (DataManager.Instance.HighScore < m_Points)
+        {
+            DataManager.Instance.HighScore = m_Points;
+
+        }
+        bestScoreText.text = $"BestScore : {DataManager.Instance.Save_playerName} {DataManager.Instance.HighScore}";
+
+    }
+
     public void Back2Menu()
     {
         SceneManager.LoadScene(0);
-    }
-
-    private void Update()
-    {
-        if (!m_Started)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                StartGame();
-            }
-        }
-
-        else if (m_GameOver)
-        {
-            RestartGame();
-
-        }
-        
-
-    }
-
-
-
-    void AddPoint(int point)
-    {
-        m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
-       
-    }
-
-    public void SaveBestScore()
-    {
-       if (DataManager.instance.HighScore < m_Points )
-       {
-        DataManager.instance.HighScore = m_Points;
-
-       }
-        bestScoreText.text = $"BestScore : {DataManager.instance.Save_playerName} {DataManager.instance.HighScore}"; 
-
-    }
+    } 
 
 
     public void GameOver()

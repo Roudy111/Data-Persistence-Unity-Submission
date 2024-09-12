@@ -6,9 +6,10 @@ using UnityEngine;
 /// <summary>
 /// This is a global singleton pattern that uses generic type. 
 /// Game objects that want to be singleton needs to be inherite from this class
+/// DontdestroyonLoad is also implemented -- then the gameobject would be persistence during the different scenes.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class singleton<T> : MonoBehaviour where T : Component
+public abstract class singleton<T> : MonoBehaviour where T : Component
 {
     private static T instance;
     public static T Instance

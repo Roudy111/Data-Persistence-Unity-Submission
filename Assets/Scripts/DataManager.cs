@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using TMPro;
 
-public class DataManager : MonoBehaviour
+public class DataManager : singleton<DataManager>
 {
    /// <summary>
    /// This script is singlethon to manage the saving between scene and session
@@ -12,24 +12,14 @@ public class DataManager : MonoBehaviour
    /// The Data Between Session are also added in SaveData Class
    /// </summary>
    /// 
-    public static DataManager instance { get; private set;}
+   
 
     public string Save_playerName;
     public int HighScore;
 
 
 
-    void Awake()
-    {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
+   
     
 
     [System.Serializable]

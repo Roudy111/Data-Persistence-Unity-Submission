@@ -37,7 +37,7 @@ public class MenuHandler : MonoBehaviour
     }
     public void PlayerName()
     {
-        DataManager.instance.Save_playerName = TM_PlayeNameInput.text;
+        DataManager.Instance.Save_playerName = TM_PlayeNameInput.text;
         
 
 
