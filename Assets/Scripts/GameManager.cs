@@ -15,9 +15,10 @@ public class GameManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
-    public Text BestScoreText;
+   
     public GameObject GameOverText;
     public Text bestScoreText;
+    public Text CurrentplayerName;
     
     private bool m_Started = false;
     private int m_Points;
@@ -38,7 +39,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InitiateBlocks();
-        SaveBestScore();
+        BestScoreUi();
+        CurrentPlayerNameSet();    
         
        
     }
@@ -140,14 +142,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SaveBestScore()
+    public void BestScoreUi()
     {
         if (DataManager.Instance.HighScore < m_Points)
         {
             DataManager.Instance.HighScore = m_Points;
 
         }
-        bestScoreText.text = $"BestScore : {DataManager.Instance.Save_playerName} {DataManager.Instance.HighScore}";
+        bestScoreText.text = $"BestScore : {DataManager.Instance.FirstPlayer} {DataManager.Instance.HighScore}";
 
     }
 
@@ -161,7 +163,24 @@ public class GameManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        SaveBestScore();
+        BestScoreUi();
+    }
+
+    public void CurrentPlayerNameSet()
+    {
+        if (CurrentplayerName != null)
+        {
+            CurrentplayerName.text = $"Player Name : {DataManager.Instance.playerId}";
+
+        }
+        else
+        {
+            Debug.LogWarning("CurrentplayerName.text = $\"Player Name : {DataManager.Instance.playerId}");
+        }
+        
+        
+
+
     }
 
 

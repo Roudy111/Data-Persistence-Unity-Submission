@@ -6,25 +6,39 @@ using TMPro;
 
 public class DataManager : singleton<DataManager>
 {
-   /// <summary>
-   /// This script is singlethon to manage the saving between scene and session
-   /// The Data between the scene should be saved here 
-   /// The Data Between Session are also added in SaveData Class
-   /// </summary>
-   /// 
-   
+    /// <summary>
+    /// This script is singlethon to manage the saving between scene and session
+    /// The Data between the scene should be saved here 
+    /// The Data Between Session are also added in SaveData Class
+    /// </summary>
+    /// 
+    
+    // Id of who is playing game
+    public string playerId;
 
-    public string Save_playerName;
+    // Varibales for highscore profile
+    public string FirstPlayer;
     public int HighScore;
 
-
-
    
-    
+
+
+
+
+
 
     [System.Serializable]
     class SaveDate
     {
+        public int HighScore;
+        public string FirstPlayer;
 
     }
+
+    public void SaveHighscore()
+    {
+
+    }
+
+   
 }

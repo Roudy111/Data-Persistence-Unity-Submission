@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Security.Policy;
+using UnityEngine.UI;
 
 
 public class MenuHandler : MonoBehaviour
@@ -13,7 +14,8 @@ public class MenuHandler : MonoBehaviour
 
     private void Start()
     {
-        
+        PlayerName();
+        TM_PlayeNameInput.onEndEdit.AddListener(OnInputFieldEndEdit);
     }
 
     public void startGame()
@@ -37,10 +39,15 @@ public class MenuHandler : MonoBehaviour
     }
     public void PlayerName()
     {
-        DataManager.Instance.Save_playerName = TM_PlayeNameInput.text;
+        DataManager.Instance.playerId = TM_PlayeNameInput.text ; 
+        Debug.Log(DataManager.Instance.playerId);
         
 
 
+    }
+    void OnInputFieldEndEdit(string value)
+    {
+        PlayerName();
     }
 
 
