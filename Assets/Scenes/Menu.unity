@@ -1734,7 +1734,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1580408737}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: startGame
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1811,12 +1811,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27797e9c45126c4793c9f00d1b6a3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlayerId: 
-  highscores:
-  - playerName: 
-    score: 0
-  - playerName: 
-    score: 0
 --- !u!4 &1852792175
 Transform:
   m_ObjectHideFlags: 0
