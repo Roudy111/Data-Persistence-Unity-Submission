@@ -1569,6 +1569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TM_PlayeNameInput: {fileID: 1319360164}
+  highscoresText: {fileID: 1619167564}
 --- !u!1 &1619167562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1810,7 +1811,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27797e9c45126c4793c9f00d1b6a3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerName: 
+  currentPlayerId: 
+  highscores:
+  - playerName: 
+    score: 0
+  - playerName: 
+    score: 0
 --- !u!4 &1852792175
 Transform:
   m_ObjectHideFlags: 0

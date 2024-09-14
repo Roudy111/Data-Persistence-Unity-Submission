@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System.Security.Policy;
 using UnityEngine.UI;
-
 
 public class MenuHandler : MonoBehaviour
 {
     public TMP_InputField TM_PlayeNameInput;
+    public Text highscoresText;
 
     private void Start()
     {
-        PlayerName();
-        TM_PlayeNameInput.onEndEdit.AddListener(OnInputFieldEndEdit);
+        if (TM_PlayeNameInput != null)
+        {
+            TM_PlayeNameInput.onEndEdit.AddListener(OnInputFieldEndEdit);
+        }
+        UpdateHighscoresUI();
     }
 
-    public void startGame()
+    public void StartGame()
     {
+        if (string.IsNullOrEmpty(DataManager.Instance.currentPlayerId))
+        {
+            DataManager.Instance.currentPlayerId = "Player";
+        }
         SceneManager.LoadScene(1);
-        
     }
 
     public void BackToMenu()
@@ -31,26 +33,31 @@ public class MenuHandler : MonoBehaviour
 
     public void ExitGame()
     {
-
 #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
 #endif
     }
-    public void PlayerName()
-    {
-        DataManager.Instance.playerId = TM_PlayeNameInput.text ; 
-        Debug.Log(DataManager.Instance.playerId);
-        
 
-
-    }
-    void OnInputFieldEndEdit(string value)
+    private void SetPlayerName()
     {
-        PlayerName();
+        if (DataManager.Instance != null && TM_PlayeNameInput != null)
+        {
+            DataManager.Instance.currentPlayerId = TM_PlayeNameInput.text;
+        }
     }
 
+    private void OnInputFieldEndEdit(string value)
+    {
+        SetPlayerName();
+    }
 
-
-
+    private void UpdateHighscoresUI()
+    {
+        if (highscoresText != null && DataManager.Instance != null)
+        {
+            highscoresText.text = DataManager.Instance.GetFormattedHighscores();
+        }
+    }
 }
