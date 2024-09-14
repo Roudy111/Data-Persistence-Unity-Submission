@@ -7,7 +7,7 @@ public class DataManager : singleton<DataManager>
 {
     public string currentPlayerId { get; set; }
     private List<HighscoreEntry> highscores = new List<HighscoreEntry>();
-    private const int MaxHighscores = 5;
+    private const int MaxHighscores = 3;
     private const string SaveFileName = "highscores.json";
 
     [System.Serializable]
@@ -32,19 +32,23 @@ public class DataManager : singleton<DataManager>
     public void AddOrUpdateHighscore(string playerName, int score)
     {
         var existingEntry = highscores.FirstOrDefault(h => h.playerName == playerName);
+        
         if (existingEntry != null)
         {
+            // Only update if the new score is higher
             if (score > existingEntry.score)
             {
                 existingEntry.score = score;
+                highscores = highscores.OrderByDescending(h => h.score).ToList();
             }
         }
         else
         {
+            // Add new entry
             highscores.Add(new HighscoreEntry { playerName = playerName, score = score });
+            highscores = highscores.OrderByDescending(h => h.score).Take(MaxHighscores).ToList();
         }
 
-        highscores = highscores.OrderByDescending(h => h.score).Take(MaxHighscores).ToList();
         SaveHighscores();
     }
 
@@ -74,5 +78,12 @@ public class DataManager : singleton<DataManager>
     public string GetFormattedHighscores()
     {
         return string.Join("\n", highscores.Select((h, i) => $"{i + 1}. {h.playerName}: {h.score}"));
+    }
+
+    public void ResetHighscores()
+    {
+        highscores.Clear();
+        SaveHighscores();
+        Debug.Log("Highscores have been reset.");
     }
 }

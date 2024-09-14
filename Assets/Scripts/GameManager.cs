@@ -90,11 +90,12 @@ public class GameManager : MonoBehaviour
         Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
     }
 
+   
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-
+        
         if (DataManager.Instance != null)
         {
             DataManager.Instance.AddOrUpdateHighscore(DataManager.Instance.currentPlayerId, m_Points);
