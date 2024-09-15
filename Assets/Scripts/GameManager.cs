@@ -8,20 +8,41 @@ public class GameManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
     public Text ScoreText;
+    public Text HighscoreText;
     public GameObject GameOverText;
-    public Text highscoresText;
     public Text CurrentplayerName;
 
     private bool m_Started = false;
-    private int m_Points;
     private int m_TotalBrick = 0;
     private bool m_GameOver = false;
 
+    private ScoreManager scoreManager;
+
     void Start()
     {
+        scoreManager = ScoreManager.Instance;
+        if (scoreManager == null)
+        {
+            Debug.LogError("ScoreManager not found!");
+            return;
+        }
+
+        scoreManager.OnScoreChanged += UpdateScoreText;
+        scoreManager.OnHighscoreUpdated += UpdateHighscoreText;
+        scoreManager.ResetScore();
+
         InitiateBlocks();
-        UpdateHighscoresUI();
+        UpdateHighscoreText();
         CurrentPlayerNameSet();
+    }
+
+    void OnDestroy()
+    {
+        if (scoreManager != null)
+        {
+            scoreManager.OnScoreChanged -= UpdateScoreText;
+            scoreManager.OnHighscoreUpdated -= UpdateHighscoreText;
+        }
     }
 
     void Update()
@@ -42,7 +63,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void InitiateBlocks()
+    void InitiateBlocks()
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -56,15 +77,15 @@ public class GameManager : MonoBehaviour
                 Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
-                brick.onDestroyed.AddListener(OnBrickDestroy);
+                brick.onDestroyed.AddListener(AddPoint);
                 m_TotalBrick++;
             }
         }
     }
 
-    private void OnBrickDestroy(int point)
+    void AddPoint(int point)
     {
-        AddPoint(point);
+        scoreManager.AddPoints(point);
         m_TotalBrick--;
 
         if (m_TotalBrick <= 0)
@@ -73,13 +94,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void AddPoint(int point)
+    void UpdateScoreText(int score)
     {
-        m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"Score : {score}";
     }
 
-    private void StartGame()
+    void UpdateHighscoreText()
+    {
+        if (HighscoreText != null && DataManager.Instance != null)
+        {
+            string highscores = DataManager.Instance.GetFormattedHighscores();
+            HighscoreText.text = $"Highscores:\n{highscores}";
+        }
+    }
+
+    void StartGame()
     {
         m_Started = true;
         float randomDirection = Random.Range(-1.0f, 1.0f);
@@ -90,28 +119,14 @@ public class GameManager : MonoBehaviour
         Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
     }
 
-   
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        
-        if (DataManager.Instance != null)
-        {
-            DataManager.Instance.AddOrUpdateHighscore(DataManager.Instance.currentPlayerId, m_Points);
-            UpdateHighscoresUI();
-        }
+        UpdateHighscoreText();
     }
 
-    private void UpdateHighscoresUI()
-    {
-        if (highscoresText != null && DataManager.Instance != null)
-        {
-            highscoresText.text = DataManager.Instance.GetFormattedHighscores();
-        }
-    }
-
-    private void CurrentPlayerNameSet()
+    void CurrentPlayerNameSet()
     {
         if (CurrentplayerName != null && DataManager.Instance != null)
         {

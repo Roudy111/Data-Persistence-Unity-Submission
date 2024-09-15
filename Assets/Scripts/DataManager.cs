@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System.Linq;
 
 public class DataManager : singleton<DataManager>
 {
@@ -29,9 +28,18 @@ public class DataManager : singleton<DataManager>
         LoadHighscores();
     }
 
-    public void AddOrUpdateHighscore(string playerName, int score)
+    public bool AddOrUpdateHighscore(string playerName, int score)
     {
-        var existingEntry = highscores.FirstOrDefault(h => h.playerName == playerName);
+        bool updated = false;
+        HighscoreEntry existingEntry = null;
+        for (int i = 0; i < highscores.Count; i++)
+        {
+            if (highscores[i].playerName == playerName)
+            {
+                existingEntry = highscores[i];
+                break;
+            }
+        }
         
         if (existingEntry != null)
         {
@@ -39,17 +47,33 @@ public class DataManager : singleton<DataManager>
             if (score > existingEntry.score)
             {
                 existingEntry.score = score;
-                highscores = highscores.OrderByDescending(h => h.score).ToList();
+                SortHighscores();
+                updated = true;
             }
         }
         else
         {
             // Add new entry
             highscores.Add(new HighscoreEntry { playerName = playerName, score = score });
-            highscores = highscores.OrderByDescending(h => h.score).Take(MaxHighscores).ToList();
+            SortHighscores();
+            if (highscores.Count > MaxHighscores)
+            {
+                highscores.RemoveAt(highscores.Count - 1);
+            }
+            updated = true;
         }
 
-        SaveHighscores();
+        if (updated)
+        {
+            SaveHighscores();
+        }
+
+        return updated;
+    }
+
+    private void SortHighscores()
+    {
+        highscores.Sort((a, b) => b.score.CompareTo(a.score));
     }
 
     private void SaveHighscores()
@@ -77,7 +101,12 @@ public class DataManager : singleton<DataManager>
 
     public string GetFormattedHighscores()
     {
-        return string.Join("\n", highscores.Select((h, i) => $"{i + 1}. {h.playerName}: {h.score}"));
+        string formattedHighscores = "";
+        for (int i = 0; i < highscores.Count; i++)
+        {
+            formattedHighscores += $"{i + 1}. {highscores[i].playerName}: {highscores[i].score}\n";
+        }
+        return formattedHighscores.TrimEnd('\n');
     }
 
     public void ResetHighscores()
