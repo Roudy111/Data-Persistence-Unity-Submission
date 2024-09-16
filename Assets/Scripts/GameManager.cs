@@ -4,17 +4,26 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
     public Brick BrickPrefab;
+    [SerializeField]
     public int LineCount = 6;
-    public Rigidbody Ball;
-    public Text ScoreText;
-    public Text HighscoreText;
-    public GameObject GameOverText;
-    public Text CurrentplayerName;
+    [SerializeField]
+    private  Rigidbody Ball;
+    [SerializeField]
+    private Text ScoreText;
+    [SerializeField]
+    private Text HighscoreText;
+    [SerializeField]
+    private GameObject GameOverText;
+    [SerializeField]
+    private Text CurrentplayerName;
 
     private bool m_Started = false;
     private int m_TotalBrick = 0;
     private bool m_GameOver = false;
+    [SerializeField]
+    private GameObject backToMenu;
 
     private ScoreManager scoreManager;
 
@@ -82,6 +91,21 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    void DeleteAllBricks()
+    {
+        // Find all brick objects in the scene
+        Brick[] bricks = FindObjectsOfType<Brick>();
+        
+        // Destroy each brick
+        foreach (var brick in bricks)
+        {
+            Destroy(brick.gameObject);
+        }
+
+        // Reset the brick count
+        m_TotalBrick = 0;
+    }
+
 
     void AddPoint(int point)
     {
@@ -122,9 +146,15 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+        DeleteAllBricks();
         GameOverText.SetActive(true);
         UpdateHighscoreText();
+        backToMenu.SetActive(true);
+        
+        
+        
     }
+
 
     void CurrentPlayerNameSet()
     {
