@@ -63,12 +63,17 @@ public class GameManager : MonoBehaviour
                 StartGame();
             }
         }
-        else if (m_GameOver)
+        if (m_GameOver)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+        }
+        else
+        {
+            // Check for new level in Update instead
+            CheckForNewLevel();
         }
     }
 
@@ -90,6 +95,7 @@ public class GameManager : MonoBehaviour
                 m_TotalBrick++;
             }
         }
+        
     }
     void DeleteAllBricks()
     {
@@ -105,18 +111,26 @@ public class GameManager : MonoBehaviour
         // Reset the brick count
         m_TotalBrick = 0;
     }
-
-
     void AddPoint(int point)
     {
         scoreManager.AddPoints(point);
         m_TotalBrick--;
+      
 
-        if (m_TotalBrick <= 0)
+        
+    }
+    void CheckForNewLevel()
+    {
+        // Check if there are no more bricks in the scene
+        if (m_TotalBrick <= 0 && FindObjectsOfType<Brick>().Length == 0)
         {
             InitiateBlocks();
         }
     }
+ 
+
+
+
 
     void UpdateScoreText(int score)
     {
