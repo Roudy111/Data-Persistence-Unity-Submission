@@ -1,6 +1,8 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public int LineCount = 6;
     [SerializeField]
-    private  Rigidbody Ball;
+    private Rigidbody Ball;
     [SerializeField]
     private Text ScoreText;
     [SerializeField]
@@ -18,6 +20,9 @@ public class GameManager : MonoBehaviour
     private GameObject GameOverText;
     [SerializeField]
     private Text CurrentplayerName;
+    [SerializeField] private Text LevelText;
+    public int currentLevel { get; private set; } = 1; // the variable to track current Level -- always initialzed at 1 
+    private bool isChangingLevel = false; // New flag to prevent multiple coroutines
 
     private bool m_Started = false;
     private int m_TotalBrick = 0;
@@ -43,6 +48,8 @@ public class GameManager : MonoBehaviour
         InitiateBlocks();
         UpdateHighscoreText();
         CurrentPlayerNameSet();
+        UpdateLevelText();
+
     }
 
     void OnDestroy()
@@ -97,6 +104,44 @@ public class GameManager : MonoBehaviour
         }
         
     }
+    void AddPoint(int point)
+    {
+        scoreManager.AddPoints(point);
+        m_TotalBrick--;
+
+
+
+    }
+    void CheckForNewLevel()
+    {
+        // Check if there are no more bricks in the scene and we're not already changing level
+        if (m_TotalBrick <= 0 && FindObjectsOfType<Brick>().Length == 0 && !isChangingLevel)
+        {
+            StartCoroutine(InitiateNextLevel());
+        }
+    }
+
+    IEnumerator InitiateNextLevel()
+    {
+        isChangingLevel = true;
+        currentLevel++; // Increment level
+        
+        UpdateLevelText(); // Update level text
+        LevelText.gameObject.SetActive(true); // Show level text
+
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds
+
+        LevelText.gameObject.SetActive(false); // Hide level text
+        InitiateBlocks(); // Initialize new blocks
+        isChangingLevel = false; // Reset the flag
+    }
+    void UpdateLevelText()
+    {
+        if (LevelText != null)
+        {
+            LevelText.text = $"Level {currentLevel}";
+        }
+    }
     void DeleteAllBricks()
     {
         // Find all brick objects in the scene
@@ -111,22 +156,8 @@ public class GameManager : MonoBehaviour
         // Reset the brick count
         m_TotalBrick = 0;
     }
-    void AddPoint(int point)
-    {
-        scoreManager.AddPoints(point);
-        m_TotalBrick--;
-      
-
-        
-    }
-    void CheckForNewLevel()
-    {
-        // Check if there are no more bricks in the scene
-        if (m_TotalBrick <= 0 && FindObjectsOfType<Brick>().Length == 0)
-        {
-            InitiateBlocks();
-        }
-    }
+    
+   
  
 
 
